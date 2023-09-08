@@ -161,15 +161,15 @@ public class SpotifyRepository {
             Playlist newPlayList = new Playlist(title);
             playlists.add(newPlayList);
 
-            List<Song> songs = new ArrayList<>();
+            List<Song> songList = new ArrayList<>();
             for(String songTitle : songTitles){
                 for(Song song : songs){
                     if(song.getTitle().equals(songTitle)){
-                        songs.add(song);
+                        songList.add(song);
                     }
                 }
             }
-            playlistSongMap.put(newPlayList , songs);
+            playlistSongMap.put(newPlayList , songList);
 
             List<User> users1 = new ArrayList<>();
             users1.add(currUser);
