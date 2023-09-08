@@ -103,45 +103,86 @@ public class SpotifyRepository {
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
 
-        User currUser = null;
-        for(User user : users){
-            if(user.getMobile().equals(mobile)){
-                currUser = user;
+//        User currUser = null;
+//        for(User user : users){
+//            if(user.getMobile().equals(mobile)){
+//                currUser = user;
+//                break;
+//            }
+//        }
+//
+//        if(currUser == null){
+//            throw new Exception("User does not exist");
+//        }else{
+//            Playlist newPlayList = new Playlist(title);
+//            playlists.add(newPlayList);
+//
+//            List<Song> songs = new ArrayList<>();
+//            for(Song song : songs){
+//                if(song.getLength() == length){
+//                    songs.add(song);
+//                }
+//            }
+//            playlistSongMap.put(newPlayList , songs);
+//
+//            List<User> users1 = new ArrayList<>();
+//            users1.add(currUser);
+//
+//            creatorPlaylistMap.put(currUser , newPlayList);
+//            playlistListenerMap.put(newPlayList , users1);
+//
+//
+//            if(userPlaylistMap.containsKey(currUser)){
+//                List<Playlist> playlists1 = userPlaylistMap.get(currUser);
+//                playlists1.add(newPlayList);
+//                userPlaylistMap.put(currUser , playlists1);
+//            }else{
+//                List<Playlist> playlists1 = new ArrayList<>();
+//                playlists1.add(newPlayList);
+//                userPlaylistMap.put(currUser , playlists1);
+//            }
+//            return newPlayList;
+//        }
+
+        User user = null;
+        for(User user1 :users){
+            if(user1.getMobile()== mobile){
+                user =user1;
                 break;
             }
         }
-
-        if(currUser == null){
+        if(user ==null){
             throw new Exception("User does not exist");
-        }else{
-            Playlist newPlayList = new Playlist(title);
-            playlists.add(newPlayList);
+        }
+        else{
+            Playlist playlist = new Playlist();
+            playlist.setTitle(title);
+            playlists.add(playlist);
 
-            List<Song> songs = new ArrayList<>();
-            for(Song song : songs){
-                if(song.getLength() == length){
-                    songs.add(song);
+            List<Song> list = new ArrayList<>();
+            for(Song song :songs){
+                if(song.getLength()==length){
+                    list.add(song);
                 }
             }
-            playlistSongMap.put(newPlayList , songs);
+            playlistSongMap.put(playlist,list);
+            List<User> list1 = new ArrayList<>();
+            list1.add(user);
+            playlistListenerMap.put(playlist,list1);
+            creatorPlaylistMap.put(user,playlist);
+            userPlaylistMap.get(user);
 
-            List<User> users1 = new ArrayList<>();
-            users1.add(currUser);
-
-            creatorPlaylistMap.put(currUser , newPlayList);
-            playlistListenerMap.put(newPlayList , users1);
-
-
-            if(userPlaylistMap.containsKey(currUser)){
-                List<Playlist> playlists1 = userPlaylistMap.get(currUser);
-                playlists1.add(newPlayList);
-                userPlaylistMap.put(currUser , playlists1);
+            if(userPlaylistMap.containsKey(user)){
+                List<Playlist> userPlayList = userPlaylistMap.get(user);
+                userPlayList.add(playlist);
+                userPlaylistMap.put(user,userPlayList);
             }else{
-                List<Playlist> playlists1 = new ArrayList<>();
-                playlists1.add(newPlayList);
-                userPlaylistMap.put(currUser , playlists1);
+                List<Playlist> plays = new ArrayList<>();
+                plays.add(playlist);
+                userPlaylistMap.put(user,plays);
             }
-            return newPlayList;
+
+            return playlist;
         }
 
 
