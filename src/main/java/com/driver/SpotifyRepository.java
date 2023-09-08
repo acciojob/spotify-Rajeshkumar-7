@@ -103,16 +103,16 @@ public class SpotifyRepository {
     }
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
-        boolean isUserPresent = false;
+
         User currUser = null;
         for(User user : users){
             if(user.getMobile().equals(mobile)){
-                isUserPresent = true;
                 currUser = user;
+                break;
             }
         }
 
-        if(!isUserPresent){
+        if(currUser == null){
             throw new Exception("User does not exist");
         }
 
@@ -130,20 +130,30 @@ public class SpotifyRepository {
         creatorPlaylistMap.put(currUser , newPlayList);
         playlistListenerMap.put(newPlayList , users);
         playlistSongMap.put(newPlayList , songs);
+
+        if(userPlaylistMap.containsKey(currUser)){
+            List<Playlist> playlists1 = userPlaylistMap.get(currUser);
+            playlists1.add(newPlayList);
+            userPlaylistMap.put(currUser , playlists1);
+        }else{
+            List<Playlist> playlists1 = new ArrayList<>();
+            playlists1.add(newPlayList);
+            userPlaylistMap.put(currUser , playlists1);
+        }
         return newPlayList;
     }
 
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
-        boolean isUserPresent = false;
+
         User currUser = null;
         for(User user : users){
             if(user.getMobile().equals(mobile)){
-                isUserPresent = true;
                 currUser = user;
+                break;
             }
         }
 
-        if(!isUserPresent){
+        if(currUser == null){
             throw new Exception("User does not exist");
         }
 
@@ -164,6 +174,16 @@ public class SpotifyRepository {
         creatorPlaylistMap.put(currUser , newPlayList);
         playlistListenerMap.put(newPlayList , users);
         playlistSongMap.put(newPlayList , songs);
+
+        if(userPlaylistMap.containsKey(currUser)){
+            List<Playlist> playlists1 = userPlaylistMap.get(currUser);
+            playlists1.add(newPlayList);
+            userPlaylistMap.put(currUser , playlists1);
+        }else{
+            List<Playlist> playlists1 = new ArrayList<>();
+            playlists1.add(newPlayList);
+            userPlaylistMap.put(currUser , playlists1);
+        }
         return newPlayList;
     }
 
