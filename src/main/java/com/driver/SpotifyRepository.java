@@ -46,60 +46,58 @@ public class SpotifyRepository {
     public Artist createArtist(String name) {
         Artist newArtist = new Artist(name);
         artists.add(newArtist);
-        artistAlbumMap.put(newArtist , new ArrayList<Album>());
         return newArtist;
     }
 
     public Album createAlbum(String title, String artistName) {
-        boolean isArtistPresent = false;
-        Artist currArtist = new Artist();
+
+        Artist currArtist = null;
         for(Artist a : artists){
             if(a.getName().equals(artistName)){
-                isArtistPresent = true;
                 currArtist = a;
+                break;
             }
         }
 
-        if(!isArtistPresent) {
+        if(currArtist == null) {
             currArtist = createArtist(artistName);
         }
 
         Album newAlbum = new Album(title);
         albums.add(newAlbum);
-        albumSongMap.put(newAlbum , new ArrayList<Song>());
 
-        List<Album> albumList = artistAlbumMap.get(currArtist);
+        List<Album> albumList = new ArrayList<>();
+        if(artistAlbumMap.containsKey(currArtist)){
+            albumList = artistAlbumMap.get(currArtist);
+        }
         albumList.add(newAlbum);
         artistAlbumMap.put(currArtist , albumList);
-        albumSongMap.put(newAlbum , new ArrayList<>());
         return newAlbum;
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception{
-        boolean isAlbumCreated = isAlbumPresent(albumName);
-        if(!isAlbumCreated){
+        Album currAlbum = null;
+        for(Album album : albums){
+            if(album.getTitle().equals(albumName)){
+                currAlbum = album;
+                break;
+            }
+        }
+
+        if(currAlbum == null){
             throw new Exception("Album does not exist");
         }
 
         Song newSong = new Song(title , length);
         songs.add(newSong);
-        for(Album album : albumSongMap.keySet()){
-            if(album.getTitle().equals(albumName)){
-                List<Song> songs = albumSongMap.get(album);
-                songs.add(newSong);
-                albumSongMap.put(album , songs);
-            }
-        }
-        return newSong;
-    }
 
-    private boolean isAlbumPresent(String albumName) {
-        for(Album A : albums){
-            if(A.getTitle().equals(albumName)){
-                return true;
-            }
+        List<Song> songList = new ArrayList<>();
+        if(albumSongMap.containsKey(currAlbum)){
+            songList = albumSongMap.get(currAlbum);
         }
-        return false;
+        songList.add(newSong);
+        albumSongMap.put(currAlbum , songList);
+        return newSong;
     }
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
